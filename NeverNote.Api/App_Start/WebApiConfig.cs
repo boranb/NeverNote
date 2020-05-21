@@ -12,6 +12,15 @@ namespace NeverNote.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            // https://stackoverflow.com/questions/7397207/json-net-error-self-referencing-loop-detected-for-type
+
+            // loop'a girmesine engel olmak için kendine referans verdiğimizde, kendine referans geldiği anda null veriyor
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling =
+                Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+            // xml serialization devre dışı bıraktık
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();

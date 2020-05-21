@@ -26,7 +26,8 @@ namespace NeverNote.Api.Models
     {
         public ApplicationDbContext() : base("ApplicationDbContext", throwIfV1Schema: false)
         {
-            Configuration.ProxyCreationEnabled = false;
+            // XML Hatasını ve 
+            // Configuration.ProxyCreationEnabled = false;
         }
         
         public static ApplicationDbContext Create()
