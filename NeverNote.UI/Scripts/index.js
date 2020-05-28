@@ -1,7 +1,8 @@
 ﻿// Globals
-
 var apiUrl = "https://localhost:44336/";
 var loginData = null;
+var selectedNote = null;
+var selectedLink = null;
 
 // Functions
 
@@ -14,19 +15,15 @@ function checkLogin() {
         showLoginPage();
         return;
     }
-    // token'i geçerli mi ?
-    $.ajax({
-        url: apiUrl + "api/Account/UserInfo",
-        type: "GET",
-        headers: { Authorization: "Bearer " + loginData.access_token },
-        success: function (data) {
-            showAppPage();
-        },
-        error: function () {
-            showLoginPage();
-        }
-    });
 
+    // is token valid?
+    ajax("api/Account/UserInfo", "GET",null,
+        function (data) {
+            console.log(data);
+            showAppPage();
+        }, function () {
+            showLoginPage();
+        });
 }
 
 function getLoginData() {
@@ -49,7 +46,30 @@ function showAppPage() {
     $(".only-logged-in").show();
     $(".only-logged-out").hide();
     $(".page").hide();
-    $("#page-app").show();
+
+    //notları getir
+    ajax("api/Notes/List", "GET",null,
+        function (data) {
+
+            $("#notes").html("");
+
+            for (var i = 0; i < data.length; i++) {
+
+                var a = $("<a/>")
+                    .attr("href", "#")
+                    .addClass("list-group-item list-group-item-action show-note")
+                    .text(data[i].Title)
+                    .prop("note", data[i]);
+
+                $("#notes").append(a);
+            }
+
+            //sayfa hazır olduğunda göster
+            $("#page-app").show();
+        },
+        function () {
+        });
+
 }
 
 function showLoginPage() {
@@ -57,6 +77,32 @@ function showLoginPage() {
     $(".only-logged-out").show();
     $(".page").hide();
     $("#page-login").show();
+}
+
+function ajax(url, type,data, successFunc, errorFunc) {
+    $.ajax({
+        url: apiUrl + url,
+        type: type,
+        data: data,
+        headers: getAuthHeader(),
+        success: successFunc,
+        error: errorFunc
+    });
+}
+
+function updateNote() {
+    ajax("api/Notes/Update/" + selectedNote.Id, "PUT",
+        {Id:selectedNote.Id, Title: $("#title").val(), Content: $("#content").val()},
+        function (data) {
+            selectedLink.note = data;
+            selectedLink.text = data.Title;
+        }, function() {
+
+        });
+}
+
+function getAuthHeader() {
+    return { Authorization: "Bearer " + getLoginData().access_token }
 }
 
 function success(message) {
@@ -68,23 +114,24 @@ function success(message) {
 }
 
 function error(modelState) {
-    var errors = [];
     if (modelState) {
+        var errors = [];
         for (var prop in modelState) {
             for (var i = 0; i < modelState[prop].length; i++) {
                 errors.push(modelState[prop][i]);
             }
         }
+
+        var ul = $("<ul/>");
+        for (var i = 0; i < errors.length; i++) {
+            ul.append($("<li/>").text(errors[i]));
+        }
+        $(".tab-pane.active .message")
+            .removeClass("alert-success")
+            .addClass("alert-danger")
+            .html(ul)
+            .show();
     }
-    var ul = $("<ul/>");
-    for (var j = 0; j < errors.length; j++) {
-        ul.append($("<li/>").text(errors[j]));
-    }
-    $(".tab-pane.active .message")
-        .removeClass("alert-success")
-        .addClass("alert-danger")
-        .html(ul)
-        .show();
 }
 
 function errorMessage(message) {
@@ -156,7 +203,7 @@ $("#signinform").submit(function (event) {
 
 });
 
-
+// https://getbootstrap.com/docs/4.0/components/navs/#events	
 $('#login a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
     // e.target // newly activated tab
     // e.relatedTarget // previous active tab
@@ -165,20 +212,39 @@ $('#login a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
 });
 
 // https://getbootstrap.com/docs/4.0/components/navs/#via-javascript
-$(".navbar-login a").click(function () {
+$(".navbar-login a").click(function (event) {
     event.preventDefault();
     var href = $(this).attr("href");
     $('#pills-tab a[href="' + href + '"]').tab('show'); // Select tab by name
 });
 
 //logOut
-$("#btnLogout").click(function () {
+$("#btnLogout").click(function (event) {
     event.preventDefault();
     sessionStorage.removeItem("login");
     localStorage.removeItem("login");
     showLoginPage();
 });
 
+$("body").on("click", ".show-note", function (event) {
+    event.preventDefault();
+    selectedNote = this.note;
+    selectedLink = this;
+    $("#title").val(selectedNote.Title);
+    $("#content").val(selectedNote.Content);
+
+    $(".show-note").removeClass("active");
+    $(this).addClass("active");
+});
+
+$("#frmNote").submit(function (event) {
+    event.preventDefault();
+    if (selectedNote) {
+        updateNote();
+    } else {
+        addNote();
+    }
+});
 
 // Actions
 checkLogin();
