@@ -17,7 +17,7 @@ function checkLogin() {
     }
 
     // is token valid?
-    ajax("api/Account/UserInfo", "GET",null,
+    ajax("api/Account/UserInfo", "GET", null,
         function (data) {
             console.log(data);
             showAppPage();
@@ -48,28 +48,38 @@ function showAppPage() {
     $(".page").hide();
 
     //notları getir
-    ajax("api/Notes/List", "GET",null,
+    ajax("api/Notes/List", "GET", null,
         function (data) {
 
             $("#notes").html("");
 
             for (var i = 0; i < data.length; i++) {
 
-                var a = $("<a/>")
-                    .attr("href", "#")
-                    .addClass("list-group-item list-group-item-action show-note")
-                    .text(data[i].Title)
-                    .prop("note", data[i]);
-
-                $("#notes").append(a);
+                addMenuLink(data[i]);
             }
-
             //sayfa hazır olduğunda göster
             $("#page-app").show();
         },
         function () {
         });
 
+}
+
+function addMenuLink(note, isActive = false) {
+    var a = $("<a/>")
+        .attr("href", "#")
+        .addClass("list-group-item list-group-item-action show-note")
+        .text(note.Title)
+        .prop("note", note);
+
+    if (isActive) {
+        $(".show-note").removeClass("active");
+        a.addClass("active");
+        selectedLink = a[0];
+        selectedNote = note;
+    }
+
+    $("#notes").prepend(a);
 }
 
 function showLoginPage() {
@@ -79,7 +89,7 @@ function showLoginPage() {
     $("#page-login").show();
 }
 
-function ajax(url, type,data, successFunc, errorFunc) {
+function ajax(url, type, data, successFunc, errorFunc) {
     $.ajax({
         url: apiUrl + url,
         type: type,
@@ -90,13 +100,24 @@ function ajax(url, type,data, successFunc, errorFunc) {
     });
 }
 
+function addNote() {
+    ajax("api/Notes/New/", "POST",
+        { Title: $("#title").val(), Content: $("#content").val() },
+        function (data) {
+            addMenuLink(data, true);
+        }, function () {
+
+        });
+}
+
 function updateNote() {
     ajax("api/Notes/Update/" + selectedNote.Id, "PUT",
-        {Id:selectedNote.Id, Title: $("#title").val(), Content: $("#content").val()},
+        { Id: selectedNote.Id, Title: $("#title").val(), Content: $("#content").val() },
         function (data) {
             selectedLink.note = data;
-            selectedLink.text = data.Title;
-        }, function() {
+            selectedLink.textContent = data.Title;
+            //$(selectedLink).text(data.Title);
+        }, function () {
 
         });
 }
@@ -149,6 +170,18 @@ function resetLoginForms() {
     $("#login form").each(function () {
         this.reset();
     });
+}
+
+function resetNoteForm() {
+    // seçili dom elementini null yap
+    // seçili notu null yap
+    // seçili notun active classını kaldır
+    // seçili notun title ve contentini sıfırla
+    selectedLink = null;
+    selectedNote = null;
+    $(".show-note").removeClass("active");
+    $("#title").val("");
+    $("#content").val("");
 }
 
 // Events
@@ -221,9 +254,15 @@ $(".navbar-login a").click(function (event) {
 //logOut
 $("#btnLogout").click(function (event) {
     event.preventDefault();
+    resetNoteForm();
     sessionStorage.removeItem("login");
     localStorage.removeItem("login");
     showLoginPage();
+});
+
+// add New note
+$(".add-new-note").click(function () {
+    resetNoteForm();
 });
 
 $("body").on("click", ".show-note", function (event) {
@@ -244,6 +283,29 @@ $("#frmNote").submit(function (event) {
     } else {
         addNote();
     }
+});
+
+// delete note
+$("#btnDelete").click(function () {
+    if (selectedNote) {
+        if (confirm("Are you sure to delete the selected note?")) {
+            ajax("api/Notes/Delete/" + selectedNote.Id,
+                "DELETE",
+                null,
+                function (data) {
+                    $(selectedLink).remove();
+                    resetNoteForm();
+                },
+                function () {
+
+                });
+        }
+    } else {
+        if (confirm("Are you sure to delete the draft?")) {
+            resetNoteForm();
+        }
+    }
+
 });
 
 // Actions
