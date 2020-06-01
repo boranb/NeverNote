@@ -1,5 +1,7 @@
 ﻿// Globals
-var apiUrl = "https://localhost:44336/";
+
+var apiUrl = "https://api.nevernote.bekoo.co/";
+//var apiUrl = "https://localhost:44336/";
 var loginData = null;
 var selectedNote = null;
 var selectedLink = null;
