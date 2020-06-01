@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeverNote.Api", "NeverNote.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeverNote.UI", "NeverNote.UI\NeverNote.UI.csproj", "{5F5EA6E0-6A06-45A5-A691-DF092E5CC448}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeverNote.Desktop", "NeverNote.Desktop\NeverNote.Desktop.csproj", "{BD54975B-BDCC-4E61-B566-1A4014B02071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5F5EA6E0-6A06-45A5-A691-DF092E5CC448}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5EA6E0-6A06-45A5-A691-DF092E5CC448}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F5EA6E0-6A06-45A5-A691-DF092E5CC448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD54975B-BDCC-4E61-B566-1A4014B02071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD54975B-BDCC-4E61-B566-1A4014B02071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD54975B-BDCC-4E61-B566-1A4014B02071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD54975B-BDCC-4E61-B566-1A4014B02071}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
