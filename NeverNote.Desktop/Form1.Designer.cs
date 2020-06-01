@@ -101,6 +101,7 @@
             this.txtNote.Location = new System.Drawing.Point(309, 134);
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
+            this.txtNote.ReadOnly = true;
             this.txtNote.Size = new System.Drawing.Size(250, 290);
             this.txtNote.TabIndex = 8;
             // 
