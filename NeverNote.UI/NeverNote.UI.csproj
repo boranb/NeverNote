@@ -86,11 +86,15 @@
     <Content Include="Content\solid.css" />
     <Content Include="Content\solid.min.css" />
     <Content Include="Content\style.css" />
+    <Content Include="Content\styles-angularjs.css" />
     <Content Include="Content\svg-with-js.css" />
     <Content Include="Content\svg-with-js.min.css" />
     <Content Include="Content\v4-shims.css" />
     <Content Include="Content\v4-shims.min.css" />
+    <Content Include="index2.html" />
     <Content Include="index.html" />
+    <Content Include="pages\app.html" />
+    <Content Include="pages\login.html" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -113,6 +117,7 @@
     <Content Include="Scripts\fontawesome\solid.min.js" />
     <Content Include="Scripts\fontawesome\v4-shims.js" />
     <Content Include="Scripts\fontawesome\v4-shims.min.js" />
+    <Content Include="Scripts\index2.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\index.js.flow" />
     <Content Include="Scripts\esm\popper.min.js.map" />
@@ -254,6 +259,7 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
