@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html class="h-100" ng-app="myApp" ng-controller="myCtrl">
+<html class="h-100" ng-app="myApp" ng-controller="mainController">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -17,7 +17,7 @@
 </head>
 <body class="h-100">
 
-    <div class="loading d-none">
+    <div class="loading" ng-show="isLoading">
         <div class="spinner-grow text-success"></div>
     </div>
 
@@ -51,7 +51,7 @@
         </nav>
     </header>
 
-    <div ng-view class="h-100"></div>
+<div ng-view class="h-100"></div>
 
 
 </body>
